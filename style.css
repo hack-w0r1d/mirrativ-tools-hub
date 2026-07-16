@@ -10,6 +10,8 @@
   --text-primary: #eaf5ef;
   --text-muted: #8ca79b;
   --text-faint: #516459;
+  --text: #f7f5f8;
+  --muted: #aaa8b2;
 
   --font-display: 'Zen Kaku Gothic New', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
@@ -24,6 +26,12 @@ html {
   scroll-behavior:smooth;
 }
 
+main {
+  max-width: 900px;
+  margin: auto;
+  padding: 48px 25px 64px;
+}
+
 body {
   margin: 0;
   background:
@@ -34,6 +42,13 @@ body {
   font-family: var(--font-body);
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
+}
+
+h1 {
+  margin: 0 0 12px;
+  font-size: clamp(26px, 5vw, 36px);
+  letter-spacing: -.03em;
+  text-align: center;
 }
 
 a {
@@ -260,10 +275,90 @@ a.station__card:focus-visible {
 footer {
   max-width: 640px;
   margin: 64px auto 0;
-  padding: 28px 24px 56px 84px;
+  padding: 28px 10px 56px 10px;
   font-family: var(--font-mono);
   font-size: 0.7rem;
   color: var(--text-faint);
+}
+
+.site-footer {
+  border-top: 1px solid var(--text-faint);
+}
+
+.footer-inner {
+  width: min(900px, calc(100% - 36px));
+  margin: 0 auto;
+}
+
+.footer-social {
+  text-align: center;
+}
+
+#x-logo {
+  width: 24px;
+}
+
+.footer-links {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.footer-links a {
+  color: var(--emerald-core);
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+.privacy-content {
+  padding-top: 14px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.75;
+}
+
+.privacy-content p {
+  margin: 0 0 12px;
+}
+
+.privacy-content h2 {
+  margin: 18px 0 4px;
+  color: var(--text);
+  font-size: 13px;
+}
+
+.privacy-content a {
+  color: #75e5bd;
+}
+
+.privacy-updated {
+  margin-bottom: 0 !important;
+  color: #85838e;
+}
+
+/* ---------- privacy ---------- */
+
+.card {
+  padding: clamp(18px, 4vw, 28px);
+  margin-top: 16px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, .035), transparent 45%), var(--bg-panel);
+  border: 1px solid var(--emerald-deep);
+  border-radius: 12px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, .22);
+}
+
+.back-link {
+  display: block;
+  width: fit-content;
+  margin: 20px 20px 0 auto;
+  color: #75e5bd;
+  font-size: 13px;
+  text-decoration: none;
 }
 
 /* ---------- Responsive ---------- */
@@ -282,9 +377,6 @@ footer {
   }
   .station__marker {
     left: -38px; width: 20px; height: 20px;
-  }
-  footer {
-    padding-left: 56px;
   }
 }
 
