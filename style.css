@@ -141,7 +141,7 @@ a {
 .line-section {
   max-width: 640px;
   margin: 0 auto;
-  padding: 24px 24px 12px 84px;
+  padding: 24px 24px 64px 84px;
   position: relative;
 }
 
@@ -150,7 +150,7 @@ a {
   position: absolute;
   left: 47px;
   top: 24px;
-  bottom: 28px;
+  bottom: 80px;
   width: 3px;
   border-radius: 3px;
   background: linear-gradient(var(--emerald-deep), var(--emerald-core));
