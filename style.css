@@ -273,9 +273,8 @@ a.station__card:focus-visible {
 
 /* ---------- Footer ---------- */
 footer {
-  max-width: 640px;
-  margin: 64px auto 0;
-  padding: 28px 10px 56px 10px;
+  margin: auto;
+  padding: 28px 10px 28px 10px;
   font-family: var(--font-mono);
   font-size: 0.7rem;
   color: var(--text-faint);
