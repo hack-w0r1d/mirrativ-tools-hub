@@ -287,9 +287,11 @@ footer {
 .footer-inner {
   width: min(900px, calc(100% - 36px));
   margin: 0 auto;
+  text-align: center;
 }
 
 .footer-social {
+  margin: 25px 0 20px;
   text-align: center;
 }
 
