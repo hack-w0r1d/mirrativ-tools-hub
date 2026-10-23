@@ -439,17 +439,9 @@ a {
   }
 }
 
-/* ---------- お気に入りを付けた瞬間 / 移動中に通過したカードの光の軌跡 ---------- */
+/* ---------- お気に入りを付けた瞬間 ---------- */
 .station .station__card.is-warmed {
   animation: card-warm 1s ease-out;
-}
-
-.station .station__card.is-trail {
-  animation: trail-glow 2s ease-out var(--trail-delay, 0s) backwards;
-}
-
-.station__card.is-trail::after {
-  animation: trail-fill 2s ease-out var(--trail-delay, 0s) backwards;
 }
 
 @keyframes card-warm {
@@ -457,21 +449,6 @@ a {
     box-shadow:
       0 0 44px rgba(255, 180, 84, 0.55),
       inset 0 0 30px rgba(255, 180, 84, 0.16);
-  }
-}
-
-@keyframes trail-glow {
-  30% {
-    border-color: rgba(255, 190, 100, 0.9);
-    box-shadow:
-      0 0 40px rgba(255, 180, 84, 0.6),
-      0 0 90px rgba(255, 180, 84, 0.25);
-  }
-}
-
-@keyframes trail-fill {
-  30% {
-    opacity: 1;
   }
 }
 
@@ -539,12 +516,13 @@ a {
   stroke-width: 1.5;
   stroke-linecap: round;
   stroke-linejoin: round;
+  transform: translateX(-4px);
   transition: transform 0.8s cubic-bezier(0.22, 0.8, 0.3, 1);
 }
 
 .station__card.is-centered .go svg,
 .station__card:not(.ghost):hover .go svg {
-  transform: translateX(5px);
+  transform: translateX(0px);
 }
 
 .station__tags {
@@ -893,9 +871,7 @@ footer {
   }
   .station .station__card.is-centered,
   .station__card.is-centered::before,
-  .station .station__card.is-warmed,
-  .station .station__card.is-trail,
-  .station__card.is-trail::after {
+  .station .station__card.is-warmed {
     animation: none;
   }
   .fav-btn[aria-pressed="true"] svg {

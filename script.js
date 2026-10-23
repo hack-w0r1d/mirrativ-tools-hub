@@ -85,21 +85,21 @@ document.getElementById('year').textContent = new Date().getFullYear();
       syncFavoriteUI(station);
       saveFavorites();
       button.classList.add('is-cooling'); // ポインターが離れるまでホバー色を出さない
-      scheduleReorder(250, station, false); // 解除時は軌跡の演出なし
+      scheduleReorder(250, station, false); // 解除時は追従スクロールなし
     } else {
       favorites.add(id);
       button.classList.remove('is-cooling');
       syncFavoriteUI(station); // その場で暖かい光のデザインに変わる
       saveFavorites();
       celebrate(station, button);
-      scheduleReorder(BURST_DELAY, station, true); // 演出のあとで優先位置へ移動
+      scheduleReorder(BURST_DELAY, station, true); // 演出のあとで優先位置へ移動し、移動先までスクロール
     }
   }
 
-  function scheduleReorder(delay, mover, withTrail) {
+  function scheduleReorder(delay, mover, follow) {
     clearTimeout(reorderTimer);
     reorderTimer = setTimeout(
-      () => reorder(true, mover, withTrail),
+      () => reorder(true, mover, follow),
       reduceMotion.matches ? 0 : delay
     );
   }
@@ -155,32 +155,7 @@ document.getElementById('year').textContent = new Date().getFullYear();
     }
   }
 
-  // 移動するカードが追い越したカードを、移動の出発点に近い順に返す
-  function getPassedStations(mover, visibleBefore, visibleAfter) {
-    if (!mover || mover.hidden) return [];
-    const from = visibleBefore.indexOf(mover);
-    const to = visibleAfter.indexOf(mover);
-    if (from < 0 || to < 0 || to >= from) return [];
-    return visibleBefore.slice(to, from).reverse();
-  }
-
-  // 追い越されたカードに、通過のタイミングに合わせて順に暖かい光を1回ずつ残す
-  function leaveTrail(passed, travel) {
-    const count = passed.length;
-    passed.forEach((station, k) => {
-      const card = station.querySelector('.station__card');
-      const progress = count === 1 ? 0.5 : k / (count - 1);
-      const delay = Math.round(travel * (0.15 + 0.7 * progress));
-      card.style.setProperty('--trail-delay', `${delay}ms`);
-      restartClass(card, 'is-trail');
-      setTimeout(() => {
-        card.classList.remove('is-trail');
-        card.style.removeProperty('--trail-delay');
-      }, delay + 2200);
-    });
-  }
-
-  // 移動先が画面の上に外れる場合は、軌跡が見えるようにページを移動先へスクロール
+  // 移動先が画面の上に外れる場合は、移動するカードが見えるようにページを移動先へスクロール
   function followMover(mover) {
     if (!mover || mover.hidden) return;
     const top = mover.getBoundingClientRect().top;
@@ -189,7 +164,7 @@ document.getElementById('year').textContent = new Date().getFullYear();
     }
   }
 
-  // 並び替えの演出中は「中央のカードが光る」判定を止める（軌跡の光と重なって二重に光って見えるため）
+  // 並び替え・自動スクロール中は「中央のカードが光る」判定を止める（通過するカードが次々に光って見えるため）
   function lockCenter(ms) {
     centerLocked = true;
     cards.forEach((c) => c.classList.remove('is-centered'));
@@ -210,7 +185,7 @@ document.getElementById('year').textContent = new Date().getFullYear();
   }
 
   // お気に入りを上に、それ以外は元の掲載順。Coming soon は常に最後尾
-  function reorder(animate, mover, withTrail) {
+  function reorder(animate, mover, follow) {
     const current = Array.from(list.querySelectorAll('.station[data-id]'));
     const sorted = stations.slice().sort((a, b) => {
       const favDiff = Number(favorites.has(b.dataset.id)) - Number(favorites.has(a.dataset.id));
@@ -243,11 +218,10 @@ document.getElementById('year').textContent = new Date().getFullYear();
       const from = visibleBefore.indexOf(mover);
       const to = visibleAfter.indexOf(mover);
       const distance = from < 0 || to < 0 ? 0 : Math.abs(from - to);
-      const passed = withTrail ? getPassedStations(mover, visibleBefore, visibleAfter) : [];
       const travel = Math.min(1300, 750 + distance * 70);
 
-      lockCenter(travel + (withTrail ? 2400 : 400));
-      if (withTrail) followMover(mover);
+      lockCenter(travel + 400);
+      if (follow) followMover(mover);
 
       sorted.forEach((s) => {
         if (!before.has(s)) return;
@@ -267,8 +241,6 @@ document.getElementById('year').textContent = new Date().getFullYear();
           anim.oncancel = () => s.classList.remove('is-moving');
         }
       });
-
-      leaveTrail(passed, travel);
     }
     updateCenter();
   }
