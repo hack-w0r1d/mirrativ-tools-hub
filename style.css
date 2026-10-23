@@ -179,6 +179,13 @@ a {
   font-weight: 700;
 }
 
+/* ×を押した直後：カードが消えてバーが入れ替わるまでの間、静かに薄れる */
+.filter-chip.is-leaving {
+  opacity: 0.35;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
 .filter-chip__remove {
   display: grid;
   place-items: center;
@@ -242,37 +249,37 @@ a {
   pointer-events: none;
 }
 
-/* ---------- Station ---------- */
-.station {
+/* ---------- Portal ---------- */
+.portal {
   position: relative;
   margin-bottom: 36px;
 }
 
 /* 初回表示と、絞り込みで再表示されたときだけフェードイン（並び替えでは再生しない） */
-.station.is-entering {
-  animation: station-in 0.4s ease backwards;
+.portal.is-entering {
+  animation: portal-in 0.4s ease backwards;
 }
 
-.station[hidden] {
+.portal[hidden] {
   display: none;
 }
 
-.station:last-child {
+.portal:last-child {
   margin-bottom: 0;
 }
 
 /* お気に入りが上へ移動している間は、通過するカードより前面に出す */
-.station.is-moving {
+.portal.is-moving {
   z-index: 5;
 }
 
-@keyframes station-in {
+@keyframes portal-in {
   from {
     opacity: 0;
   }
 }
 
-.station__marker {
+.portal__marker {
   position: absolute;
   left: -59px;
   top: 20px;
@@ -283,7 +290,7 @@ a {
   box-shadow: 0 0 12px var(--emerald-core);
 }
 
-.station__marker.ghost {
+.portal__marker.ghost {
   width: 18px;
   height: 18px;
   background: transparent;
@@ -294,7 +301,7 @@ a {
 }
 
 /* --glow：カードの光の色（RGB）。お気に入りでは暖色に切り替わる */
-.station__card {
+.portal__card {
   --glow: 0, 212, 136;
   position: relative;
   isolation: isolate;
@@ -310,7 +317,7 @@ a {
 }
 
 /* お気に入り用の暖色レイヤー（カード背景の上、文字の下） */
-.station__card::after {
+.portal__card::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -325,7 +332,7 @@ a {
 }
 
 /* 中央に来たとき、カードの内側から星のようにじわーっと明るくなる光 */
-.station__card::before {
+.portal__card::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -340,7 +347,7 @@ a {
 }
 
 /* ---------- Favorite card：全体が暖かい光の色に ---------- */
-.station.is-fav .station__card {
+.portal.is-fav .portal__card {
   --glow: 255, 180, 84;
   border-color: rgba(255, 180, 84, 0.55);
   box-shadow:
@@ -348,55 +355,55 @@ a {
     inset 0 0 28px rgba(255, 180, 84, 0.07);
 }
 
-.station.is-fav .station__card::after {
+.portal.is-fav .portal__card::after {
   opacity: 1;
 }
 
-.station__title,
-.station__foot .go,
-.station__desc,
-.station__by {
+.portal__title,
+.portal__foot .go,
+.portal__desc,
+.portal__by {
   transition: color 0.5s ease, text-shadow 0.5s ease;
 }
 
-.station.is-fav .station__title {
+.portal.is-fav .portal__title {
   color: #ffe9c9;
   text-shadow: 0 0 14px rgba(255, 180, 84, 0.35);
 }
 
-.station.is-fav .station__foot .go {
+.portal.is-fav .portal__foot .go {
   color: #f0c488;
 }
 
-.station.is-fav .station__desc {
+.portal.is-fav .portal__desc {
   color: #cdb596;
 }
 
-.station.is-fav .station__by {
+.portal.is-fav .portal__by {
   color: #8d7658;
 }
 
-.station.is-fav .tag {
+.portal.is-fav .tag {
   color: #ffc982;
   background: rgba(255, 180, 84, 0.1);
   border-color: rgba(255, 180, 84, 0.32);
 }
 
-.station.is-fav .tag:hover,
-.station.is-fav .tag:focus-visible {
+.portal.is-fav .tag:hover,
+.portal.is-fav .tag:focus-visible {
   background: rgba(255, 180, 84, 0.22);
   border-color: var(--warm-spark);
 }
 
-.station.is-fav .tag.is-active {
+.portal.is-fav .tag.is-active {
   background: var(--warm-spark);
   border-color: var(--warm-spark);
   color: #2a1600;
 }
 
 /* ---------- スクロールで中央に来たカード / ホバー：大きく浮いて光る ---------- */
-.station .station__card.is-centered,
-.station .station__card:not(.ghost):hover {
+.portal .portal__card.is-centered,
+.portal .portal__card:not(.ghost):hover {
   transform: translateY(-12px) scale(1.025);
   border-color: rgba(var(--glow), 0.75);
   box-shadow:
@@ -406,11 +413,11 @@ a {
 }
 
 /* 星が見つけてほしそうに、ゆっくり呼吸するように明るさが揺らぐ（じわっと明るくなる遷移が終わってから開始） */
-.station .station__card.is-centered {
+.portal .portal__card.is-centered {
   animation: beckon 3.6s ease-in-out 1.2s infinite alternate;
 }
 
-.station__card.is-centered::before {
+.portal__card.is-centered::before {
   opacity: 1;
   animation: bloom-breathe 3.6s ease-in-out 1.6s infinite alternate;
 }
@@ -440,7 +447,7 @@ a {
 }
 
 /* ---------- お気に入りを付けた瞬間 ---------- */
-.station .station__card.is-warmed {
+.portal .portal__card.is-warmed {
   animation: card-warm 1s ease-out;
 }
 
@@ -454,7 +461,7 @@ a {
 
 /* ---------- Card contents ---------- */
 /* リンクをカード全体に広げる（星・タグは z-index で前面に出す） */
-.station__link {
+.portal__link {
   flex: 1;
   display: flex;
   align-items: center;
@@ -464,7 +471,7 @@ a {
   text-decoration: none;
 }
 
-.station__link::after {
+.portal__link::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -472,16 +479,16 @@ a {
   border-radius: 16px;
 }
 
-.station__link:focus-visible {
+.portal__link:focus-visible {
   outline: none;
 }
 
-.station__link:focus-visible::after {
+.portal__link:focus-visible::after {
   outline: 2px solid var(--emerald-core);
   outline-offset: 2px;
 }
 
-.station__name {
+.portal__name {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.08rem;
@@ -494,7 +501,7 @@ a {
 }
 
 /* 作成者と同じ行の右端に置く矢印（下側の矢羽根を削った片羽のデザイン） */
-.station__foot {
+.portal__foot {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -502,13 +509,13 @@ a {
   margin-top: 12px;
 }
 
-.station__foot .go {
+.portal__foot .go {
   display: inline-flex;
   color: var(--text-muted);
   pointer-events: none;
 }
 
-.station__foot .go svg {
+.portal__foot .go svg {
   width: 28px;
   height: 12px;
   fill: none;
@@ -520,12 +527,12 @@ a {
   transition: transform 0.8s cubic-bezier(0.22, 0.8, 0.3, 1);
 }
 
-.station__card.is-centered .go svg,
-.station__card:not(.ghost):hover .go svg {
+.portal__card.is-centered .go svg,
+.portal__card:not(.ghost):hover .go svg {
   transform: translateX(0px);
 }
 
-.station__tags {
+.portal__tags {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
@@ -562,13 +569,13 @@ a {
   font-weight: 700;
 }
 
-.station__desc {
+.portal__desc {
   color: var(--text-muted);
   font-size: 0.88rem;
   margin: 0;
 }
 
-.station__by {
+.portal__by {
   font-family: var(--font-mono);
   font-size: 0.68rem;
   color: var(--text-faint);
@@ -724,14 +731,14 @@ a {
   }
 }
 
-/* ---------- Ghost (placeholder) station ---------- */
-.station__card.ghost {
+/* ---------- Ghost (placeholder) portal ---------- */
+.portal__card.ghost {
   border-style: dashed;
   border-color: var(--bg-panel-edge);
   background: transparent;
 }
 
-.station__card.ghost .station__desc {
+.portal__card.ghost .portal__desc {
   color: var(--text-faint);
 }
 
@@ -844,7 +851,7 @@ footer {
   .line-section::after {
     left: 23px;
   }
-  .station__marker {
+  .portal__marker {
     left: -38px; width: 20px; height: 20px;
   }
 }
@@ -856,22 +863,22 @@ footer {
   html {
     scroll-behavior: auto;
   }
-  .station.is-entering {
+  .portal.is-entering {
     animation: none;
   }
   .line-section::after {
     transition: none;
   }
-  .station__card {
+  .portal__card {
     transition: none;
   }
-  .station .station__card.is-centered,
-  .station .station__card:not(.ghost):hover {
+  .portal .portal__card.is-centered,
+  .portal .portal__card:not(.ghost):hover {
     transform: none;
   }
-  .station .station__card.is-centered,
-  .station__card.is-centered::before,
-  .station .station__card.is-warmed {
+  .portal .portal__card.is-centered,
+  .portal__card.is-centered::before,
+  .portal .portal__card.is-warmed {
     animation: none;
   }
   .fav-btn[aria-pressed="true"] svg {
